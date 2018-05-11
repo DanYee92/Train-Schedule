@@ -43,26 +43,26 @@ $("#add-train").on("click", function() {
   destination = $("#destination").val().trim();
   firstTrainTime = $("#train-time").val().trim();
   frequency = $("#frequency").val().trim();
-  
+
   // First Time (pushed back 1 year to make sure it comes before current time)
   var firstTimeConverted = moment(firstTrainTime, "hh:mm").subtract(1, "years");
   //console.log("FTC: "+firstTimeConverted);
 
   // Difference between the times
   var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-  //console.log("Difference in time: " + diffTime);
+
 
   // Time apart (remainder)
   var tRemainder = diffTime % frequency;
-  //console.log(tRemainder);
+
 
   // Minute Until Train
   var minutesAway = frequency - tRemainder;
-  //console.log("Minutes away: " + minutesAway);
+
 
   // Next Train
   var nextTrain = moment().add(minutesAway, "minutes");
-  //console.log("Arrival time: " + moment(nextTrain).format("hh:mm"));
+
 
   // Arrival time
   var nextArrival = moment(nextTrain).format("hh:mm a");
@@ -82,7 +82,7 @@ $("#add-train").on("click", function() {
     nextArrival: nextArrival,
     dateAdded: firebase.database.ServerValue.TIMESTAMP
   });
-  
+
   alert("Form submitted!");
 
   // Empty text input
@@ -90,27 +90,14 @@ $("#add-train").on("click", function() {
   $("#destination").val("");
   $("#train-time").val("");
   $("#frequency").val("");
-  
-  // Don't refresh the page!
-  return false; 
+
+
+  return false;
 });
 
-// Delete function
-// $(document).on("click", ".delete", function(){
-//   var confirmDelete = confirm("Are you sure you want to delete this entry?");
-  
-//    if (confirmDelete){
-//     var entry = $(this).attr("data-index");
-//     database.ref().child(trainIDs[entry]).remove();
-//     location.reload();
-//    } else{
-//      return false;
-//    }
-  
-// });
 
 // Firebase watcher + initial loader HINT: This code behaves similarly to .on("child_added")
-// This will only show the 25 latest entries
+
   database.ref().orderByChild("dateAdded").limitToLast(25).on("child_added", function(snapshot) {
 
 
@@ -125,11 +112,11 @@ $("#add-train").on("click", function() {
 
   // Change the HTML to reflect
   $("#new-train").append("<tr><td>" + snapshot.val().trainName + "</td>" +
-    "<td>" + snapshot.val().destination + "</td>" + 
-    "<td>" + "Every " + snapshot.val().frequency + " mins" + "</td>" + 
+    "<td>" + snapshot.val().destination + "</td>" +
+    "<td>" + "Every " + snapshot.val().frequency + " mins" + "</td>" +
     "<td>" + snapshot.val().nextArrival + "</td>" +
     "<td>" + snapshot.val().minutesAway + " mins until arrival" + "</td>" +
-   // "<td><button class='delete btn btn-default btn-sm' data-index='" + index + "'><span class='glyphicon glyphicon-trash'></span></button> " + 
+   // "<td><button class='delete btn btn-default btn-sm' data-index='" + index + "'><span class='glyphicon glyphicon-trash'></span></button> " +
    // "<button type='button' class='btn btn-default btn-sm'><span class='glyphicon glyphicon-edit'></span></button>" +
     "</td></tr>");
 
@@ -141,7 +128,7 @@ $("#add-train").on("click", function() {
   });
 
   //Gets the train IDs in an Array
-  database.ref().once('value', function(dataSnapshot){ 
+  database.ref().once('value', function(dataSnapshot){
     var trainIndex = 0;
 
       dataSnapshot.forEach(
@@ -152,11 +139,3 @@ $("#add-train").on("click", function() {
   });
 
   console.log(trainIDs);
-
-
-
-
-// References:
-// In class activites: 
-// RecentUser_withAllUsers.html
-// Train Example
